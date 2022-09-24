@@ -1,19 +1,25 @@
 package me.chikage.emicompat.ae2;
 
 import appeng.api.config.CondenserOutput;
+import appeng.api.features.P2PTunnelAttunementInternal;
+import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEParts;
 import appeng.recipes.handlers.InscriberRecipe;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiRenderable;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import appeng.core.AppEng;
+import me.chikage.emicompat.ae2.recipe.EMIAttunementRecipe;
 import me.chikage.emicompat.ae2.recipe.EMICondenserRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIInscriberRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Ae2Plugin implements EmiPlugin {
@@ -21,7 +27,8 @@ public class Ae2Plugin implements EmiPlugin {
 
     public static final EmiRecipeCategory
             Inscriber = register("inscriber", EmiStack.of(AEBlocks.INSCRIBER.stack())),
-            Condenser = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack()));
+            Condenser = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack())),
+            Attunement = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL));
 
     @Override
     public void register(EmiRegistry registry) {
@@ -36,6 +43,12 @@ public class Ae2Plugin implements EmiPlugin {
         registry.addWorkstation(Condenser, EmiStack.of(AEBlocks.CONDENSER.stack()));
         registry.addRecipe(new EMICondenserRecipe(CondenserOutput.MATTER_BALLS));
         registry.addRecipe(new EMICondenserRecipe(CondenserOutput.SINGULARITY));
+
+        for (var entry : P2PTunnelAttunementInternal.getTagTunnels().entrySet()) {
+            registry.addRecipe(new EMIAttunementRecipe(List.of(EmiIngredient.of(Ingredient.of(entry.getKey()))),
+                    List.of(EmiStack.of(entry.getValue()))));
+        }
+
 
     }
 
