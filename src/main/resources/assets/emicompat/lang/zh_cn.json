@@ -1,4 +1,6 @@
 {
   "emi.category.ae2.condenser": "物质聚合器",
-  "emi.category.ae2.inscriber": "压印器"
+  "emi.category.ae2.inscriber": "压印器",
+  "emi.category.ae2.attunement": "P2P通道调整",
+  "emi.category.ae2.throwinginwater": "投入水中"
 }

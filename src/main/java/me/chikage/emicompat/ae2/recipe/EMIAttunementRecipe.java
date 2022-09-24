@@ -33,9 +33,9 @@ public class EMIAttunementRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        widgets.addTexture(EmiTexture.EMPTY_ARROW,width / 2 - 41 + 27,height / 2 - 13 + 4);
+        widgets.addTexture(EmiTexture.EMPTY_ARROW, width / 2 - 41 + 27, height / 2 - 13 + 4);
         widgets.addSlot(new ListEmiIngredient(input, input.size()), width / 2 - 41 + 4, height / 2 - 13 + 4);
-        widgets.addSlot(output.get(0),width / 2 - 41 + 56, height / 2 - 13 + 4);
+        widgets.addSlot(output.get(0), width / 2 - 41 + 56, height / 2 - 13 + 4);
     }
 
     @Override

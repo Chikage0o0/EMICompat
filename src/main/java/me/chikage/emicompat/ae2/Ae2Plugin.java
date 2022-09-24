@@ -2,9 +2,12 @@ package me.chikage.emicompat.ae2;
 
 import appeng.api.config.CondenserOutput;
 import appeng.api.features.P2PTunnelAttunementInternal;
+import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
+import appeng.items.misc.CrystalSeedItem;
 import appeng.recipes.handlers.InscriberRecipe;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -15,7 +18,10 @@ import dev.emi.emi.api.stack.EmiStack;
 import me.chikage.emicompat.ae2.recipe.EMIAttunementRecipe;
 import me.chikage.emicompat.ae2.recipe.EMICondenserRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIInscriberRecipe;
+import me.chikage.emicompat.ae2.recipe.EMIThrowingInWaterRecipe;
+import me.chikage.emicompat.ae2.render.GrowingSeedIconRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.LinkedHashMap;
@@ -28,7 +34,9 @@ public class Ae2Plugin implements EmiPlugin {
     public static final EmiRecipeCategory
             Inscriber = register("inscriber", EmiStack.of(AEBlocks.INSCRIBER.stack())),
             Condenser = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack())),
-            Attunement = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL));
+            Attunement = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL)),
+            ThrowingInWater = register("throwinginwater", certusQuartzCrystalIcon());
+
 
     @Override
     public void register(EmiRegistry registry) {
@@ -50,6 +58,29 @@ public class Ae2Plugin implements EmiPlugin {
         }
 
 
+        if (AEConfig.instance().isInWorldCrystalGrowthEnabled()) {
+            registry.addRecipe(
+                    new EMIThrowingInWaterRecipe(
+                            List.of(EmiIngredient.of(Ingredient.of(AEItems.CERTUS_CRYSTAL_SEED))),
+                            List.of(EmiStack.of(AEItems.CERTUS_QUARTZ_CRYSTAL.stack())),
+                            true));
+            registry.addRecipe(
+                    new EMIThrowingInWaterRecipe(
+                            List.of(EmiIngredient.of(Ingredient.of(AEItems.FLUIX_CRYSTAL_SEED))),
+                            List.of(EmiStack.of(AEItems.FLUIX_CRYSTAL.stack())),
+                            true));
+        }
+        if (AEConfig.instance().isInWorldFluixEnabled()) {
+            registry.addRecipe(
+                    new EMIThrowingInWaterRecipe(
+                            List.of(
+                                    EmiIngredient.of(Ingredient.of(Items.REDSTONE)),
+                                    EmiIngredient.of(Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED)),
+                                    EmiIngredient.of(Ingredient.of(Items.QUARTZ))),
+                            List.of(EmiStack.of(AEItems.FLUIX_DUST.stack(2))),
+                            false));
+        }
+
     }
 
     private static EmiRecipeCategory register(String name, EmiRenderable icon) {
@@ -57,5 +88,21 @@ public class Ae2Plugin implements EmiPlugin {
         EmiRecipeCategory category = new EmiRecipeCategory(id, icon);
         ALL.put(id, category);
         return category;
+    }
+
+    private static GrowingSeedIconRenderer certusQuartzCrystalIcon() {
+        var stage1 = AEItems.CERTUS_CRYSTAL_SEED.stack();
+        CrystalSeedItem.setGrowthTicks(stage1, 0);
+        var stage2 = AEItems.CERTUS_CRYSTAL_SEED.stack();
+        CrystalSeedItem.setGrowthTicks(stage2, (int) (CrystalSeedItem.GROWTH_TICKS_REQUIRED * 0.4f));
+        var stage3 = AEItems.CERTUS_CRYSTAL_SEED.stack();
+        CrystalSeedItem.setGrowthTicks(stage3, (int) (CrystalSeedItem.GROWTH_TICKS_REQUIRED * 0.7f));
+        var result = AEItems.CERTUS_QUARTZ_CRYSTAL.stack();
+
+        return new GrowingSeedIconRenderer(List.of(
+                stage1,
+                stage2,
+                stage3,
+                result));
     }
 }

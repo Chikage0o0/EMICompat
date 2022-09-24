@@ -60,7 +60,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "dev.emi:emi:${project.emi_version}"
-    modImplementation ("appeng:appliedenergistics2-fabric:${project.ae2_version}"){
+    modImplementation("appeng:appliedenergistics2-fabric:${project.ae2_version}") {
         exclude group: "mezz.jei"
         exclude group: "net.fabricmc.fabric-api"
         exclude group: "mcp.mobius.waila"
