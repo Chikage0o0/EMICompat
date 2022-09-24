@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "emicompat",
+  "version": "${version}",
+  "name": "Emicompat",
+  "description": "Add other mod compatibility to EMI",
+  "authors": [
+    "Chikage"
+  ],
+  "contact": {
+    "website": "https://github.com/Chikage0o0/emicompat",
+    "repo": "https://github.com/Chikage0o0/emicompat"
+  },
+  "license": "MIT",
+  "icon": "assets/emicompat/icon.jpg",
+  "environment": "client",
+  "entrypoints": {
+    "emi": [
+      "me.chikage.emicompat.EmiCompatPlugin"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "1.18.2",
+    "emi": ">=0.4.0+1.18.2"
+  }
+}
