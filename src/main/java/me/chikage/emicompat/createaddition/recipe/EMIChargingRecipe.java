@@ -18,7 +18,8 @@ import java.util.List;
 
 public class EMIChargingRecipe extends CreateEmiRecipe<ChargingRecipe> {
     public EMIChargingRecipe(ChargingRecipe recipe) {
-        super(CreateAdditionPlugin.Charging, recipe, 177, 53, c->{});
+        super(CreateAdditionPlugin.Charging, recipe, 177, 53, c -> {
+        });
         this.input = List.of(EmiIngredient.of(recipe.ingredient));
         this.output = List.of(EmiStack.of(recipe.getResultItem()));
     }

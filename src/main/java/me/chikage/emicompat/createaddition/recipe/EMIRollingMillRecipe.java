@@ -15,7 +15,8 @@ import java.util.List;
 
 public class EMIRollingMillRecipe extends CreateEmiRecipe<RollingRecipe> {
     public EMIRollingMillRecipe(RollingRecipe recipe) {
-        super(CreateAdditionPlugin.RollingMill, recipe, 177, 53, c->{});
+        super(CreateAdditionPlugin.RollingMill, recipe, 177, 53, c -> {
+        });
         this.input = List.of(EmiIngredient.of(recipe.getIngredient()));
         this.output = List.of(EmiStack.of(recipe.getResultItem()));
     }
