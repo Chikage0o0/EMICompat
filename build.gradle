@@ -12,42 +12,32 @@ repositories {
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
+
+    maven { url = "https://mvn.devos.one/snapshots/" }
+
+    maven { url = "https://hephaestus.dev/release" }
+    maven { url = "https://api.modrinth.com/maven" }
+    maven { url = "https://cursemaven.com" }
+    maven { url = "https://maven.parchmentmc.org" }
+    maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://maven.tterrag.com/" }
+    maven { url = "https://storage.googleapis.com/devan-maven/" }
+    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = "https://aperlambda.github.io/maven" }
+    maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
+    maven { url = "https://maven.kotlindiscord.com/repository/terraformers/" }
+    maven { url = "https://mvn.devos.one/releases/" }
+    maven { url = "https://mvn.devos.one/snapshots/" }
+    maven { url = "https://maven.terraformersmc.com/" }
+    maven { url = "https://maven.cafeteria.dev/releases/" }
+    maven { url = "https://jitpack.io/" }
+    maven { url = "https://maven.gegy.dev" }
+    maven { url = "https://dvs1.progwml6.com/files/maven/" }
+    maven { url = "https://modmaven.dev" }
     maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
         content {
-            includeGroup "maven.modrinth"
-        }
-    }
-    maven {
-        name "Modmaven"
-        url "https://modmaven.dev/"
-        content {
-            includeGroup "net.fabricmc.fabric-api"
-            includeGroup "appeng"
-        }
-    }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-        content {
-            includeGroup "com.terraformersmc"
-            includeGroup "dev.emi"
-        }
-    }
-    maven {
-        url "https://maven.shedaniel.me/"
-        content {
-            includeGroup "me.shedaniel"
-            includeGroup "me.shedaniel.cloth"
-            includeGroup "dev.architectury"
-        }
-    }
-    maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
-        content {
-            includeGroup "maven.modrinth"
+            includeGroup("com.jamieswhiteshirt")
         }
     }
 }
@@ -66,6 +56,9 @@ dependencies {
         exclude group: "me.shedaniel"
     }
     modImplementation "maven.modrinth:farmers-delight-fabric:${project.farmersdelight_version}"
+
+    modImplementation("com.simibubi.create:create-fabric-${project.minecraft_version}:${project.create_version}")
+    modImplementation files("libs/createaddition+1.18.2-20220914a.jar")
 }
 
 processResources {
