@@ -36,19 +36,18 @@ repositories {
         }
     }
     maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
-        content {
-            includeGroup "com.terraformersmc"
-            includeGroup "dev.emi"
-        }
-    }
-    maven {
         url "https://maven.shedaniel.me/"
         content {
             includeGroup "me.shedaniel"
             includeGroup "me.shedaniel.cloth"
             includeGroup "dev.architectury"
+        }
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
         }
     }
 }
@@ -58,14 +57,15 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "dev.emi:emi:${project.emi_version}"
     modImplementation("appeng:appliedenergistics2-fabric:${project.ae2_version}") {
         exclude group: "mezz.jei"
-        exclude group: "net.fabricmc.fabric-api"
         exclude group: "mcp.mobius.waila"
         exclude group: "me.shedaniel"
     }
+    modImplementation "maven.modrinth:farmers-delight-fabric:${project.farmersdelight_version}"
 }
 
 processResources {

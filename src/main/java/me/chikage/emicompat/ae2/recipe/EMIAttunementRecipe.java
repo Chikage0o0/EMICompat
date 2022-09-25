@@ -1,5 +1,6 @@
 package me.chikage.emicompat.ae2.recipe;
 
+import appeng.core.AppEng;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -12,6 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.PrimitiveIterator;
+import java.util.stream.IntStream;
 
 public class EMIAttunementRecipe implements EmiRecipe {
     protected final EmiRecipeCategory category;
@@ -20,10 +23,14 @@ public class EMIAttunementRecipe implements EmiRecipe {
     protected List<EmiStack> output;
     protected int width, height;
     protected boolean supportsRecipeTree;
+    private static final PrimitiveIterator.OfInt ids = IntStream.iterate(0, n -> n + 1).iterator();
 
     public EMIAttunementRecipe(List<EmiIngredient> input, List<EmiStack> output) {
-        this.category = Ae2Plugin.Attunement;
-        this.id = category.getId();
+        this.category = Ae2Plugin.ATTUNEMENT;
+        this.id = new ResourceLocation(String.format(
+                "emi:%s/attunement/%d",
+                AppEng.MOD_ID,
+                ids.nextInt()));
         this.width = 150;
         this.height = 36;
         this.supportsRecipeTree = false;

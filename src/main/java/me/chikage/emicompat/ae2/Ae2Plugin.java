@@ -32,10 +32,10 @@ public class Ae2Plugin implements EmiPlugin {
     public static final Map<ResourceLocation, EmiRecipeCategory> ALL = new LinkedHashMap<>();
 
     public static final EmiRecipeCategory
-            Inscriber = register("inscriber", EmiStack.of(AEBlocks.INSCRIBER.stack())),
-            Condenser = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack())),
-            Attunement = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL)),
-            ThrowingInWater = register("throwinginwater", certusQuartzCrystalIcon());
+            INSCRIBER = register("inscriber", EmiStack.of(AEBlocks.INSCRIBER.stack())),
+            CONDENSER = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack())),
+            ATTUNEMENT = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL)),
+            THROWINGINWATER = register("throwinginwater", certusQuartzCrystalIcon());
 
 
     @Override
@@ -43,12 +43,12 @@ public class Ae2Plugin implements EmiPlugin {
         var recipes = registry.getRecipeManager();
         ALL.forEach((id, category) -> registry.addCategory(category));
 
-        registry.addWorkstation(Inscriber, EmiStack.of(AEBlocks.INSCRIBER.stack()));
+        registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
         recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
                 .parallel().map(EMIInscriberRecipe::new)
                 .forEach(registry::addRecipe);
 
-        registry.addWorkstation(Condenser, EmiStack.of(AEBlocks.CONDENSER.stack()));
+        registry.addWorkstation(CONDENSER, EmiStack.of(AEBlocks.CONDENSER.stack()));
         registry.addRecipe(new EMICondenserRecipe(CondenserOutput.MATTER_BALLS));
         registry.addRecipe(new EMICondenserRecipe(CondenserOutput.SINGULARITY));
 

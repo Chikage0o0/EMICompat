@@ -1,6 +1,7 @@
 package me.chikage.emicompat.ae2.recipe;
 
 import appeng.core.AppEng;
+import appeng.core.definitions.AEItems;
 import appeng.recipes.handlers.InscriberRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -12,7 +13,9 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,10 +30,11 @@ public class EMIInscriberRecipe implements EmiRecipe {
     protected List<EmiStack> output;
     protected int width, height;
 
+    protected final List<EmiIngredient> catalysts;
     protected boolean supportsRecipeTree;
 
     public EMIInscriberRecipe(InscriberRecipe recipe) {
-        this.category = Ae2Plugin.Inscriber;
+        this.category = Ae2Plugin.INSCRIBER;
         this.recipe = recipe;
         this.id = recipe.getId();
         this.width = 97;
@@ -39,7 +43,17 @@ public class EMIInscriberRecipe implements EmiRecipe {
         this.top = List.of(EmiIngredient.of(recipe.getTopOptional()));
         this.middle = List.of(EmiIngredient.of(recipe.getMiddleInput()));
         this.bottom = List.of(EmiIngredient.of(recipe.getBottomOptional()));
-        this.input = Stream.of(top, middle, bottom).flatMap(Collection::stream).collect(Collectors.toList());
+        if (!top.isEmpty() && !top.get(0).getEmiStacks().isEmpty() &&
+                (Objects.equals(top.get(0).getEmiStacks().get(0).getId(), AEItems.LOGIC_PROCESSOR_PRESS.id()) ||
+                        Objects.equals(top.get(0).getEmiStacks().get(0).getId(), AEItems.CALCULATION_PROCESSOR_PRESS.id()) ||
+                        Objects.equals(top.get(0).getEmiStacks().get(0).getId(), AEItems.ENGINEERING_PROCESSOR_PRESS.id()) ||
+                        Objects.equals(top.get(0).getEmiStacks().get(0).getId(), AEItems.SILICON_PRESS.id()))) {
+            this.catalysts = top;
+            this.input = Stream.of(middle, bottom).flatMap(Collection::stream).collect(Collectors.toList());
+        } else {
+            this.catalysts = Collections.emptyList();
+            this.input = Stream.of(top, middle, bottom).flatMap(Collection::stream).collect(Collectors.toList());
+        }
         this.output = List.of(EmiStack.of(recipe.getResultItem()));
     }
 
@@ -86,5 +100,10 @@ public class EMIInscriberRecipe implements EmiRecipe {
     @Override
     public int getDisplayHeight() {
         return height;
+    }
+
+    @Override
+    public List<EmiIngredient> getCatalysts() {
+        return catalysts;
     }
 }

@@ -1,5 +1,6 @@
 package me.chikage.emicompat.ae2.recipe;
 
+import appeng.core.AppEng;
 import appeng.core.localization.ItemModText;
 import appeng.entity.GrowingCrystalEntity;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -19,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PrimitiveIterator;
+import java.util.stream.IntStream;
 
 import static dev.emi.emi.EmiRenderHelper.CLIENT;
 
@@ -31,10 +34,14 @@ public class EMIThrowingInWaterRecipe implements EmiRecipe {
     protected int width, height;
     protected boolean supportsRecipeTree;
     protected boolean supportsAccelerators;
+    private static final PrimitiveIterator.OfInt ids = IntStream.iterate(0, n -> n + 1).iterator();
 
     public EMIThrowingInWaterRecipe(List<EmiIngredient> input, List<EmiStack> output, boolean supportsAccelerators) {
-        this.category = Ae2Plugin.ThrowingInWater;
-        this.id = category.getId();
+        this.category = Ae2Plugin.THROWINGINWATER;
+        this.id = new ResourceLocation(String.format(
+                "emi:%s/throwinginwater/%d",
+                AppEng.MOD_ID,
+                ids.nextInt()));
         this.width = 150;
         this.height = 72;
         this.supportsRecipeTree = true;

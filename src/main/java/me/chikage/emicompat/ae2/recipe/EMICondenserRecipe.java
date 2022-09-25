@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.PrimitiveIterator;
+import java.util.stream.IntStream;
 
 public class EMICondenserRecipe implements EmiRecipe {
 
@@ -33,11 +35,15 @@ public class EMICondenserRecipe implements EmiRecipe {
     protected List<EmiStack> output;
     protected int width, height;
     protected boolean supportsRecipeTree;
+    private static final PrimitiveIterator.OfInt ids = IntStream.iterate(0, n -> n + 1).iterator();
 
     public EMICondenserRecipe(CondenserOutput recipe) {
-        this.category = Ae2Plugin.Condenser;
+        this.category = Ae2Plugin.CONDENSER;
         this.recipe = recipe;
-        this.id = category.getId();
+        this.id = new ResourceLocation(String.format(
+                "emi:%s/condenser/%d",
+                AppEng.MOD_ID,
+                ids.nextInt()));
         this.width = 94 + 2 * PADDING;
         this.height = 48 + 2 * PADDING;
         this.supportsRecipeTree = true;
