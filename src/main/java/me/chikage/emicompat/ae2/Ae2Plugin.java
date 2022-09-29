@@ -12,6 +12,7 @@ import appeng.recipes.handlers.InscriberRecipe;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.render.EmiRenderable;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
@@ -42,6 +43,8 @@ public class Ae2Plugin implements EmiPlugin {
     public void register(EmiRegistry registry) {
         var recipes = registry.getRecipeManager();
         ALL.forEach((id, category) -> registry.addCategory(category));
+
+        registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(AEParts.CRAFTING_TERMINAL.stack()));
 
         registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
         recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
