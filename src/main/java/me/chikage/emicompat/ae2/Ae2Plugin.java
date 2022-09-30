@@ -8,6 +8,7 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.items.misc.CrystalSeedItem;
+import appeng.menu.me.items.CraftingTermMenu;
 import appeng.recipes.handlers.InscriberRecipe;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -21,6 +22,7 @@ import me.chikage.emicompat.ae2.recipe.EMICondenserRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIInscriberRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIThrowingInWaterRecipe;
 import me.chikage.emicompat.ae2.render.GrowingSeedIconRenderer;
+import me.chikage.emicompat.ae2.transfer.UseCraftingRecipeTransfer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -45,6 +47,7 @@ public class Ae2Plugin implements EmiPlugin {
         ALL.forEach((id, category) -> registry.addCategory(category));
 
         registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(AEParts.CRAFTING_TERMINAL.stack()));
+        registry.addRecipeHandler(CraftingTermMenu.TYPE, new UseCraftingRecipeTransfer());
 
         registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
         recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
