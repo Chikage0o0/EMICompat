@@ -3,6 +3,7 @@ package me.chikage.emicompat;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import me.chikage.emicompat.ae2.Ae2Plugin;
+import me.chikage.emicompat.ae2wtlib.Ae2wtlibPlugin;
 import me.chikage.emicompat.createaddition.CreateAdditionPlugin;
 import me.chikage.emicompat.farmersdelight.FarmersDelightPlugin;
 import net.fabricmc.loader.api.FabricLoader;
@@ -21,5 +22,7 @@ public class EmiCompatPlugin implements EmiPlugin {
             new FarmersDelightPlugin().register(emi);
         if (loader.isModLoaded("createaddition"))
             new CreateAdditionPlugin().register(emi);
+        if (loader.isModLoaded("ae2wtlib"))
+            new Ae2wtlibPlugin().register(emi);
     }
 }

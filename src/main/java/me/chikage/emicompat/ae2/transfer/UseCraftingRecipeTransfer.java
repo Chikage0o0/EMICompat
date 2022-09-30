@@ -30,12 +30,12 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import java.util.*;
 
 
-public class UseCraftingRecipeTransfer implements EmiRecipeHandler<CraftingTermMenu> {
+public class UseCraftingRecipeTransfer<T extends CraftingTermMenu> implements EmiRecipeHandler<T> {
     private final Comparator<GridInventoryEntry> ENTRY_COMPARATOR = Comparator
             .comparing(GridInventoryEntry::getStoredAmount);
 
     @Override
-    public List<Slot> getInputSources(CraftingTermMenu handler) {
+    public List<Slot> getInputSources(T handler) {
         List<Slot> list = new ArrayList<>();
         list.addAll(Objects.requireNonNull(handler.getClientRepo()).getAllEntries().stream().map((s) -> {
                     ItemStack item = Objects.requireNonNull(s.getWhat()).wrapForDisplayOrFilter();
@@ -49,12 +49,12 @@ public class UseCraftingRecipeTransfer implements EmiRecipeHandler<CraftingTermM
 
 
     @Override
-    public boolean canCraft(EmiRecipe recipe, EmiPlayerInventory inventory, AbstractContainerScreen<CraftingTermMenu> screen) {
+    public boolean canCraft(EmiRecipe recipe, EmiPlayerInventory inventory, AbstractContainerScreen<T> screen) {
         return true;
     }
 
     @Override
-    public List<Slot> getCraftingSlots(CraftingTermMenu handler) {
+    public List<Slot> getCraftingSlots(T handler) {
         return Collections.emptyList();
     }
 
@@ -64,7 +64,7 @@ public class UseCraftingRecipeTransfer implements EmiRecipeHandler<CraftingTermM
     }
 
     @Override
-    public boolean performFill(EmiRecipe recipe, AbstractContainerScreen<CraftingTermMenu> screen, EmiFillAction action, int amount) {
+    public boolean performFill(EmiRecipe recipe, AbstractContainerScreen<T> screen, EmiFillAction action, int amount) {
         if (recipe instanceof EmiCraftingRecipe) {
             var templateItems = findGoodTemplateItems(recipe, screen.getMenu());
 

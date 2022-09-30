@@ -59,6 +59,7 @@ dependencies {
 
     modImplementation("com.simibubi.create:create-fabric-${project.minecraft_version}:${project.create_version}")
     modImplementation files("libs/createaddition+1.18.2-20220914a.jar")
+    modImplementation files("libs/AE2WTLib-11.1.5.jar")
 }
 
 processResources {

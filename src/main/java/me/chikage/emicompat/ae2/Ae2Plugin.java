@@ -9,6 +9,7 @@ import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.items.misc.CrystalSeedItem;
 import appeng.menu.me.items.CraftingTermMenu;
+import appeng.menu.me.items.WirelessCraftingTermMenu;
 import appeng.recipes.handlers.InscriberRecipe;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -47,7 +48,9 @@ public class Ae2Plugin implements EmiPlugin {
         ALL.forEach((id, category) -> registry.addCategory(category));
 
         registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(AEParts.CRAFTING_TERMINAL.stack()));
-        registry.addRecipeHandler(CraftingTermMenu.TYPE, new UseCraftingRecipeTransfer());
+        registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(AEItems.WIRELESS_CRAFTING_TERMINAL.stack()));
+        registry.addRecipeHandler(CraftingTermMenu.TYPE, new UseCraftingRecipeTransfer<>());
+        registry.addRecipeHandler(WirelessCraftingTermMenu.TYPE, new UseCraftingRecipeTransfer<>());
 
         registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
         recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
