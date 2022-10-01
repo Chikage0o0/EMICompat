@@ -2,6 +2,7 @@ package me.chikage.emicompat.ae2;
 
 import appeng.api.config.CondenserOutput;
 import appeng.api.features.P2PTunnelAttunementInternal;
+import appeng.client.gui.AEBaseScreen;
 import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
@@ -18,19 +19,25 @@ import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.render.EmiRenderable;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.Bounds;
 import me.chikage.emicompat.ae2.recipe.EMIAttunementRecipe;
 import me.chikage.emicompat.ae2.recipe.EMICondenserRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIInscriberRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIThrowingInWaterRecipe;
 import me.chikage.emicompat.ae2.render.GrowingSeedIconRenderer;
 import me.chikage.emicompat.ae2.transfer.UseCraftingRecipeTransfer;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.reflections.Reflections;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 public class Ae2Plugin implements EmiPlugin {
     public static final Map<ResourceLocation, EmiRecipeCategory> ALL = new LinkedHashMap<>();
@@ -51,6 +58,15 @@ public class Ae2Plugin implements EmiPlugin {
         registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(AEItems.WIRELESS_CRAFTING_TERMINAL.stack()));
         registry.addRecipeHandler(CraftingTermMenu.TYPE, new UseCraftingRecipeTransfer<>());
         registry.addRecipeHandler(WirelessCraftingTermMenu.TYPE, new UseCraftingRecipeTransfer<>());
+
+
+        Reflections reflections = new Reflections("appeng");
+        Set<Class<? extends AEBaseScreen>> subClass = reflections.getSubTypesOf(AEBaseScreen.class);
+        subClass.forEach(i -> registry.addExclusionArea(i, (screen, consumer) -> {
+            if (screen != null)
+                mapRects(screen.getExclusionZones()).forEach(bounds -> consumer.accept((Bounds) bounds));
+        }));
+
 
         registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
         recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
@@ -113,5 +129,11 @@ public class Ae2Plugin implements EmiPlugin {
                 stage2,
                 stage3,
                 result));
+    }
+
+    public static List<Bounds> mapRects(List<Rect2i> exclusionZones) {
+        return exclusionZones.stream()
+                .map(ez -> new Bounds(ez.getX(), ez.getY(), ez.getWidth(), ez.getHeight()))
+                .collect(Collectors.toList());
     }
 }
