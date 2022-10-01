@@ -9,6 +9,7 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.items.misc.CrystalSeedItem;
+import appeng.menu.AEBaseMenu;
 import appeng.menu.me.items.CraftingTermMenu;
 import appeng.menu.me.items.WirelessCraftingTermMenu;
 import appeng.recipes.handlers.InscriberRecipe;
@@ -30,12 +31,10 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.reflections.Reflections;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -59,14 +58,13 @@ public class Ae2Plugin implements EmiPlugin {
         registry.addRecipeHandler(CraftingTermMenu.TYPE, new UseCraftingRecipeTransfer<>());
         registry.addRecipeHandler(WirelessCraftingTermMenu.TYPE, new UseCraftingRecipeTransfer<>());
 
-
-        Reflections reflections = new Reflections("appeng");
-        Set<Class<? extends AEBaseScreen>> subClass = reflections.getSubTypesOf(AEBaseScreen.class);
-        subClass.forEach(i -> registry.addExclusionArea(i, (screen, consumer) -> {
-            if (screen != null)
-                mapRects(screen.getExclusionZones()).forEach(bounds -> consumer.accept((Bounds) bounds));
-        }));
-
+        registry.addGenericExclusionArea((screen, consumer) -> {
+            if (screen != null) {
+                if (screen instanceof AEBaseScreen<? extends AEBaseMenu> baseScreen) {
+                    mapRects(baseScreen.getExclusionZones()).forEach(consumer);
+                }
+            }
+        });
 
         registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
         recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
