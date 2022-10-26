@@ -50,16 +50,16 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "dev.emi:emi:${project.emi_version}"
-    modImplementation("appeng:appliedenergistics2-fabric:${project.ae2_version}") {
+    modImplementation("maven.modrinth:ae2:fabric-${project.ae2_version}") {
         exclude group: "mezz.jei"
         exclude group: "mcp.mobius.waila"
         exclude group: "me.shedaniel"
     }
     modImplementation "maven.modrinth:farmers-delight-fabric:${project.farmersdelight_version}"
 
-    modImplementation("com.simibubi.create:create-fabric-${project.minecraft_version}:${project.create_version}")
-    modImplementation files("libs/createaddition+1.18.2-20220914a.jar")
-    modImplementation files("libs/AE2WTLib-11.1.5.jar")
+//    modImplementation("com.simibubi.create:create-fabric-${project.minecraft_version}:${project.create_version}")
+//    modImplementation files("libs/createaddition+1.18.2-20220914a.jar")
+    modImplementation files("libs/AE2WTLib-12.8.4-beta.jar")
 }
 
 processResources {

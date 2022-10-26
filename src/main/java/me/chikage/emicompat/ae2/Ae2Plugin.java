@@ -3,16 +3,15 @@ package me.chikage.emicompat.ae2;
 import appeng.api.config.CondenserOutput;
 import appeng.api.features.P2PTunnelAttunementInternal;
 import appeng.client.gui.AEBaseScreen;
-import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
-import appeng.items.misc.CrystalSeedItem;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.me.items.CraftingTermMenu;
 import appeng.menu.me.items.WirelessCraftingTermMenu;
 import appeng.recipes.handlers.InscriberRecipe;
+import appeng.recipes.transform.TransformRecipe;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -24,12 +23,10 @@ import dev.emi.emi.api.widget.Bounds;
 import me.chikage.emicompat.ae2.recipe.EMIAttunementRecipe;
 import me.chikage.emicompat.ae2.recipe.EMICondenserRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIInscriberRecipe;
-import me.chikage.emicompat.ae2.recipe.EMIThrowingInWaterRecipe;
-import me.chikage.emicompat.ae2.render.GrowingSeedIconRenderer;
+import me.chikage.emicompat.ae2.recipe.EMIItemTransformationRecipe;
 import me.chikage.emicompat.ae2.transfer.UseCraftingRecipeTransfer;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.LinkedHashMap;
@@ -45,7 +42,7 @@ public class Ae2Plugin implements EmiPlugin {
             INSCRIBER = register("inscriber", EmiStack.of(AEBlocks.INSCRIBER.stack())),
             CONDENSER = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack())),
             ATTUNEMENT = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL)),
-            THROWINGINWATER = register("throwinginwater", certusQuartzCrystalIcon());
+            ITEM_TRANSFORMATION = register("item_transformation", EmiStack.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED));
 
 
     @Override
@@ -80,30 +77,9 @@ public class Ae2Plugin implements EmiPlugin {
                     List.of(EmiStack.of(entry.getValue()))));
         }
 
-
-        if (AEConfig.instance().isInWorldCrystalGrowthEnabled()) {
-            registry.addRecipe(
-                    new EMIThrowingInWaterRecipe(
-                            List.of(EmiIngredient.of(Ingredient.of(AEItems.CERTUS_CRYSTAL_SEED))),
-                            List.of(EmiStack.of(AEItems.CERTUS_QUARTZ_CRYSTAL.stack())),
-                            true));
-            registry.addRecipe(
-                    new EMIThrowingInWaterRecipe(
-                            List.of(EmiIngredient.of(Ingredient.of(AEItems.FLUIX_CRYSTAL_SEED))),
-                            List.of(EmiStack.of(AEItems.FLUIX_CRYSTAL.stack())),
-                            true));
-        }
-        if (AEConfig.instance().isInWorldFluixEnabled()) {
-            registry.addRecipe(
-                    new EMIThrowingInWaterRecipe(
-                            List.of(
-                                    EmiIngredient.of(Ingredient.of(Items.REDSTONE)),
-                                    EmiIngredient.of(Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED)),
-                                    EmiIngredient.of(Ingredient.of(Items.QUARTZ))),
-                            List.of(EmiStack.of(AEItems.FLUIX_DUST.stack(2))),
-                            false));
-        }
-
+        recipes.getAllRecipesFor(TransformRecipe.TYPE).stream()
+                .parallel().map(EMIItemTransformationRecipe::new)
+                .forEach(registry::addRecipe);
     }
 
     private static EmiRecipeCategory register(String name, EmiRenderable icon) {
@@ -113,21 +89,6 @@ public class Ae2Plugin implements EmiPlugin {
         return category;
     }
 
-    private static GrowingSeedIconRenderer certusQuartzCrystalIcon() {
-        var stage1 = AEItems.CERTUS_CRYSTAL_SEED.stack();
-        CrystalSeedItem.setGrowthTicks(stage1, 0);
-        var stage2 = AEItems.CERTUS_CRYSTAL_SEED.stack();
-        CrystalSeedItem.setGrowthTicks(stage2, (int) (CrystalSeedItem.GROWTH_TICKS_REQUIRED * 0.4f));
-        var stage3 = AEItems.CERTUS_CRYSTAL_SEED.stack();
-        CrystalSeedItem.setGrowthTicks(stage3, (int) (CrystalSeedItem.GROWTH_TICKS_REQUIRED * 0.7f));
-        var result = AEItems.CERTUS_QUARTZ_CRYSTAL.stack();
-
-        return new GrowingSeedIconRenderer(List.of(
-                stage1,
-                stage2,
-                stage3,
-                result));
-    }
 
     public static List<Bounds> mapRects(List<Rect2i> exclusionZones) {
         return exclusionZones.stream()
