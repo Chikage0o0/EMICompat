@@ -10,6 +10,7 @@ import appeng.core.definitions.AEParts;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.me.items.CraftingTermMenu;
 import appeng.menu.me.items.WirelessCraftingTermMenu;
+import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberRecipe;
 import appeng.recipes.transform.TransformRecipe;
 import dev.emi.emi.api.EmiPlugin;
@@ -24,6 +25,7 @@ import me.chikage.emicompat.ae2.recipe.EMIAttunementRecipe;
 import me.chikage.emicompat.ae2.recipe.EMICondenserRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIInscriberRecipe;
 import me.chikage.emicompat.ae2.recipe.EMIItemTransformationRecipe;
+import me.chikage.emicompat.ae2.recipe.EMIChargerRecipe;
 import me.chikage.emicompat.ae2.transfer.UseCraftingRecipeTransfer;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +44,8 @@ public class Ae2Plugin implements EmiPlugin {
             INSCRIBER = register("inscriber", EmiStack.of(AEBlocks.INSCRIBER.stack())),
             CONDENSER = register("condenser", EmiStack.of(AEBlocks.CONDENSER.stack())),
             ATTUNEMENT = register("attunement", EmiStack.of(AEParts.ME_P2P_TUNNEL)),
-            ITEM_TRANSFORMATION = register("item_transformation", EmiStack.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED));
+            ITEM_TRANSFORMATION = register("item_transformation", EmiStack.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED)),
+            CHARGER = register("charger", EmiStack.of(AEBlocks.CHARGER.stack()));
 
 
     @Override
@@ -79,6 +82,11 @@ public class Ae2Plugin implements EmiPlugin {
 
         recipes.getAllRecipesFor(TransformRecipe.TYPE).stream()
                 .parallel().map(EMIItemTransformationRecipe::new)
+                .forEach(registry::addRecipe);
+
+        registry.addWorkstation(CHARGER, EmiStack.of(AEBlocks.CHARGER.stack()));
+        recipes.getAllRecipesFor(ChargerRecipe.TYPE).stream()
+                .parallel().map(EMIChargerRecipe::new)
                 .forEach(registry::addRecipe);
     }
 
