@@ -1,6 +1,5 @@
 package me.chikage.emicompat.ae2.recipe;
 
-import appeng.core.AppEng;
 import appeng.core.definitions.AEBlocks;
 import appeng.recipes.transform.TransformRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -33,10 +32,7 @@ public class EMIItemTransformationRecipe implements EmiRecipe {
     public EMIItemTransformationRecipe(TransformRecipe recipe) {
         this.recipe = recipe;
         this.category = Ae2Plugin.ITEM_TRANSFORMATION;
-        this.id = new ResourceLocation(String.format(
-                "emi:%s/item_transformation/%d",
-                AppEng.MOD_ID,
-                ids.nextInt()));
+        this.id = recipe.getId();
         this.width = 150;
         this.height = 72;
         this.supportsRecipeTree = true;
