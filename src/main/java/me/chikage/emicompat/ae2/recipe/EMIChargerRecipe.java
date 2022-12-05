@@ -1,10 +1,8 @@
 package me.chikage.emicompat.ae2.recipe;
 
-import appeng.blockentity.misc.ChargerBlockEntity;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.localization.ItemModText;
 import appeng.recipes.handlers.ChargerRecipe;
-import appeng.tile.grindstone.CrankBlockEntity;
 import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -49,9 +47,9 @@ public class EMIChargerRecipe implements EmiRecipe {
 
         widgets.addFillingArrow(52, 8, 1);
 
-        var turns = (ChargerBlockEntity.POWER_MAXIMUM_AMOUNT + CrankBlockEntity.POWER_PER_CRANK_TURN - 1) / CrankBlockEntity.POWER_PER_CRANK_TURN;
+        int turns = 10;
 
-        widgets.addText(EmiPort.ordered(ItemModText.CHARGER_REQUIRED_POWER.text(turns, ChargerBlockEntity.POWER_MAXIMUM_AMOUNT)), 20, 35, 0x7E7E7E, false);
+        widgets.addText(EmiPort.ordered(ItemModText.CHARGER_REQUIRED_POWER.text(turns, 1600)), 20, 35, 0x7E7E7E, false);
     }
 
     @Override

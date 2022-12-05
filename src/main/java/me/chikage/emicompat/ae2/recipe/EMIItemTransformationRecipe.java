@@ -1,7 +1,9 @@
 package me.chikage.emicompat.ae2.recipe;
 
 import appeng.core.definitions.AEBlocks;
+import appeng.core.localization.ItemModText;
 import appeng.recipes.transform.TransformRecipe;
+import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -10,13 +12,12 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.chikage.emicompat.ae2.Ae2Plugin;
 import me.chikage.emicompat.ae2.render.WaterBlockRenderer;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.PrimitiveIterator;
-import java.util.stream.IntStream;
 
 public class EMIItemTransformationRecipe implements EmiRecipe {
 
@@ -27,7 +28,6 @@ public class EMIItemTransformationRecipe implements EmiRecipe {
     protected int width, height;
     protected boolean supportsRecipeTree;
     protected final TransformRecipe recipe;
-    private static final PrimitiveIterator.OfInt ids = IntStream.iterate(0, n -> n + 1).iterator();
 
     public EMIItemTransformationRecipe(TransformRecipe recipe) {
         this.recipe = recipe;
@@ -66,6 +66,13 @@ public class EMIItemTransformationRecipe implements EmiRecipe {
         var arrow1 = widgets.addTexture(EmiTexture.EMPTY_ARROW, col2, yOffset);
         final int col3 = col2 + arrow1.getBounds().width() + 6;
 
+        MutableComponent circumstance;
+        if (recipe.circumstance.isExplosion()) {
+            circumstance = ItemModText.EXPLOSION.text();
+        } else {
+            circumstance = ItemModText.SUBMERGE_IN.text();
+        }
+        widgets.addText(EmiPort.ordered(circumstance), col3, yOffset-15, 8289918, false);
         if (recipe.circumstance.isFluid()) {
             widgets.add(new WaterBlockRenderer(col3, yOffset, 14, 14));
         } else if (recipe.circumstance.isExplosion()) {
