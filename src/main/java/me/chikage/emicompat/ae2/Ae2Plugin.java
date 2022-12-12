@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static me.chikage.emicompat.EmiCompatPlugin.addAll;
+
 
 public class Ae2Plugin implements EmiPlugin {
     public static final Map<ResourceLocation, EmiRecipeCategory> ALL = new LinkedHashMap<>();
@@ -46,7 +48,6 @@ public class Ae2Plugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
-        var recipes = registry.getRecipeManager();
         ALL.forEach((id, category) -> registry.addCategory(category));
 
         registry.addWorkstation(VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(AEParts.CRAFTING_TERMINAL.stack()));
@@ -63,9 +64,7 @@ public class Ae2Plugin implements EmiPlugin {
         });
 
         registry.addWorkstation(INSCRIBER, EmiStack.of(AEBlocks.INSCRIBER.stack()));
-        recipes.getAllRecipesFor(InscriberRecipe.TYPE).stream()
-                .parallel().map(EMIInscriberRecipe::new)
-                .forEach(registry::addRecipe);
+        addAll(registry,InscriberRecipe.TYPE,EMIInscriberRecipe::new);
 
         registry.addWorkstation(CONDENSER, EmiStack.of(AEBlocks.CONDENSER.stack()));
         registry.addRecipe(new EMICondenserRecipe(CondenserOutput.MATTER_BALLS));
@@ -76,14 +75,10 @@ public class Ae2Plugin implements EmiPlugin {
                     List.of(EmiStack.of(entry.getValue()))));
         }
 
-        recipes.getAllRecipesFor(TransformRecipe.TYPE).stream()
-                .parallel().map(EMIItemTransformationRecipe::new)
-                .forEach(registry::addRecipe);
+        addAll(registry,TransformRecipe.TYPE,EMIItemTransformationRecipe::new);
 
         registry.addWorkstation(CHARGER, EmiStack.of(AEBlocks.CHARGER.stack()));
-        recipes.getAllRecipesFor(ChargerRecipe.TYPE).stream()
-                .parallel().map(EMIChargerRecipe::new)
-                .forEach(registry::addRecipe);
+        addAll(registry,ChargerRecipe.TYPE,EMIChargerRecipe::new);
     }
 
     private static EmiRecipeCategory register(String name, EmiRenderable icon) {
@@ -94,7 +89,8 @@ public class Ae2Plugin implements EmiPlugin {
     }
 
 
-    public static List<Bounds> mapRects(List<Rect2i> exclusionZones) {
+
+    private static List<Bounds> mapRects(List<Rect2i> exclusionZones) {
         return exclusionZones.stream()
                 .map(ez -> new Bounds(ez.getX(), ez.getY(), ez.getWidth(), ez.getHeight()))
                 .collect(Collectors.toList());

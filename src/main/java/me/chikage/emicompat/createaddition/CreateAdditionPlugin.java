@@ -17,6 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static me.chikage.emicompat.EmiCompatPlugin.addAll;
+
 
 public class CreateAdditionPlugin implements EmiPlugin {
     public static final Map<ResourceLocation, EmiRecipeCategory> ALL = new LinkedHashMap<>();
@@ -27,20 +29,13 @@ public class CreateAdditionPlugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
-        var recipes = registry.getRecipeManager();
         ALL.forEach((id, category) -> registry.addCategory(category));
 
         registry.addWorkstation(Charging, EmiStack.of(CABlocks.TESLA_COIL.get()));
         registry.addWorkstation(RollingMill, EmiStack.of(CABlocks.ROLLING_MILL.get()));
 
-        recipes.getAllRecipesFor(ChargingRecipe.TYPE).stream()
-                .parallel().map(EMIChargingRecipe::new)
-                .forEach(registry::addRecipe);
-
-        recipes.getAllRecipesFor(RollingRecipe.TYPE).stream()
-                .parallel().map(EMIRollingMillRecipe::new)
-                .forEach(registry::addRecipe);
-
+        addAll(registry, ChargingRecipe.TYPE, EMIChargingRecipe::new);
+        addAll(registry, RollingRecipe.TYPE, EMIRollingMillRecipe::new);
     }
 
     private static EmiRecipeCategory register(String name, EmiRenderable icon) {

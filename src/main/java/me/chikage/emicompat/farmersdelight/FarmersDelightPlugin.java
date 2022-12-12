@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.nhoryzon.mc.farmersdelight.FarmersDelightMod.MOD_ID;
+import static me.chikage.emicompat.EmiCompatPlugin.addAll;
 
 public class FarmersDelightPlugin implements EmiPlugin {
     public static final Map<ResourceLocation, EmiRecipeCategory> ALL = new LinkedHashMap<>();
@@ -43,23 +44,16 @@ public class FarmersDelightPlugin implements EmiPlugin {
         RecipeType<CookingPotRecipe> COOKING_T = RecipeTypesRegistry.COOKING_RECIPE_SERIALIZER.type();
         RecipeType<CuttingBoardRecipe> CUTTING_T = RecipeTypesRegistry.CUTTING_RECIPE_SERIALIZER.type();
 
-        var recipes = registry.getRecipeManager();
         ALL.forEach((id, category) -> registry.addCategory(category));
 
         registry.addWorkstation(VanillaEmiRecipeCategories.CAMPFIRE_COOKING, EmiStack.of(ItemsRegistry.STOVE.get()));
         registry.addWorkstation(VanillaEmiRecipeCategories.CAMPFIRE_COOKING, EmiStack.of(ItemsRegistry.SKILLET.get()));
 
         registry.addWorkstation(FarmersDelightPlugin.COOKING, EmiStack.of(ItemsRegistry.COOKING_POT.get()));
-        recipes.getAllRecipesFor(COOKING_T).stream()
-                .parallel()
-                .map(EmiCookingPotRecipe::new)
-                .forEach(registry::addRecipe);
+        addAll(registry, COOKING_T, EmiCookingPotRecipe::new);
 
         registry.addWorkstation(CUTTING, EmiStack.of(ItemsRegistry.CUTTING_BOARD.get()));
-        recipes.getAllRecipesFor(CUTTING_T).stream()
-                .parallel()
-                .map(EmiCuttingBoardRecipe::new)
-                .forEach(registry::addRecipe);
+        addAll(registry, CUTTING_T, EmiCuttingBoardRecipe::new);
 
         registry.addRecipe(new EmiDecompositionRecipe(
                 List.of(EmiIngredient.of(Ingredient.of(BlocksRegistry.ORGANIC_COMPOST.get()))),

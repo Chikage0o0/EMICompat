@@ -1,6 +1,7 @@
 package me.chikage.emicompat.farmersdelight.recipe;
 
 import com.nhoryzon.mc.farmersdelight.FarmersDelightMod;
+import com.nhoryzon.mc.farmersdelight.registry.TagsRegistry;
 import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -11,6 +12,9 @@ import dev.emi.emi.api.widget.DrawableWidget.DrawableWidgetConsumer;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.chikage.emicompat.farmersdelight.FarmersDelightPlugin;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.PrimitiveIterator;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EmiDecompositionRecipe implements EmiRecipe {
@@ -67,12 +72,9 @@ public class EmiDecompositionRecipe implements EmiRecipe {
         gui.addSlot(output.get(0), 84, 16)
                 .drawBack(false);
 
-        if (!catalysts.isEmpty() && catalysts.get(0).isEmpty()) {
-            // gui.addTexture(SLOT, 55, 44);
-            gui.addSlot(this.catalysts.get(0), 55, 44)
-                    .customBackground(GUI_TEXTURE, 119, 0, 18, 18)
-                    .catalyst(true);
-        }
+        gui.addSlot(EmiIngredient.of(Registry.BLOCK.getTag(TagsRegistry.COMPOST_ACTIVATORS).stream().flatMap(HolderSet::stream).map(Holder::value).map(v->EmiStack.of(v.asItem())).collect(Collectors.toList())) , 55, 44)
+                .customBackground(GUI_TEXTURE, 119, 0, 18, 18)
+                .catalyst(true);
 
         gui.addDrawable(33, 30, 13, 13, NULL_RENDERABLE)
                 .tooltip(((mouseX, mouseY) -> List.of(ClientTooltipComponent.create(EmiPort.translatable("farmersdelight.rei.decomposition.light").getVisualOrderText()))));
