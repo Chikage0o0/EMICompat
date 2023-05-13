@@ -75,6 +75,7 @@ dependencies {
         exclude group: "net.fabricmc.fabric-api"
     }
     modImplementation "maven.modrinth:farmers-delight-fabric:${project.farmersdelight_version}"
+    modImplementation "maven.modrinth:expanded-delight:${project.expandeddelight_version}"
 
     modImplementation("com.simibubi.create:create-fabric-${project.minecraft_version}:${project.create_version}+${project.minecraft_version}")
     modImplementation files("libs/createaddition+1.19.2-1.19.2-20221128a.jar")
