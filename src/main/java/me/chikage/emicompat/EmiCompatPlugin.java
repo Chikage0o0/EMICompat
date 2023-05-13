@@ -6,6 +6,7 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import me.chikage.emicompat.ae2.Ae2Plugin;
 import me.chikage.emicompat.ae2wtlib.Ae2wtlibPlugin;
 import me.chikage.emicompat.createaddition.CreateAdditionPlugin;
+import me.chikage.emicompat.expandeddelight.ExpandedDelightPlugin;
 import me.chikage.emicompat.farmersdelight.FarmersDelightPlugin;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.Container;
@@ -27,6 +28,8 @@ public class EmiCompatPlugin implements EmiPlugin {
             new Ae2Plugin().register(emi);
         if (loader.isModLoaded("farmersdelight"))
             new FarmersDelightPlugin().register(emi);
+        if (loader.isModLoaded("expandeddelight"))
+            new ExpandedDelightPlugin().register(emi);
         if (loader.isModLoaded("createaddition"))
             new CreateAdditionPlugin().register(emi);
         if (loader.isModLoaded("ae2wtlib"))
